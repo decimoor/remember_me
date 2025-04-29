@@ -9,6 +9,9 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Provider } from "./components/ui/provider";
+import { Container, Flex } from "@chakra-ui/react";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -41,8 +44,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+const queryClient = new QueryClient();
+
 export default function App() {
-  return <Outlet />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Provider>
+        <Container width="full" centerContent padding={0} height="fit" minHeight="full" paddingTop={"10"}>
+          <Flex flexDir="column" width="full" paddingX="5" maxWidth={"6xl"} alignItems="center">
+            <Outlet />
+          </Flex>
+        </Container>
+      </Provider>
+    </QueryClientProvider>
+  )
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
